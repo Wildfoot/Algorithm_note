@@ -19,17 +19,17 @@ int newNode()
 
 int main()
 {
-    int n,arr[100000],ans_10,ans2 = 0,ans3 = 0;
+    int n,arr[100001],ans_10,ans2 = 0,ans3 = 0;
 
     cin >> n;
-    for(int i = 0;i < n;i++)
+    for(int i = 1;i <= n;i++)
     {
         cin >> arr[i];
     }
     
     root = newNode();
-    bool str[100000][21] = {0},ans[21] = {0},Sans2[21] = {0};
-    for(int i = 0;i < n;i++)
+    bool str[100001][21] = {0},ans[21] = {0},Sans2[21] = {0};
+    for(int i = 0;i <= n;i++)
     {
         for(int j = 0;j < 21;j++)
         {
@@ -109,12 +109,12 @@ int main()
         //cout << "flag = " << flag << endl;
         if(flag)
         {
-            ans3 = i + 1;
+            ans3 = i;
             for(int j = 0;j < 21;j++)
             {
                 ans[j] = Sans[j];
             }
-            ans2 = count[ptr] + 2;
+            ans2 = count[ptr] + 1;
         }
         /*
         cout << "ans" << i << " = ";
@@ -136,5 +136,5 @@ int main()
             ans_10 = ans_10 + temp;
         }
     }
-    cout << ans_10 << " " << ans2 << " " << ans3;
+    cout << ans_10 << " " << ans2 << " " << ans3 << endl;
 }
