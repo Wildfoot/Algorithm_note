@@ -35,7 +35,7 @@ int main()
         {
             str[i][j] = arr[i] % 2;
             arr[i] = arr[i] / 2;
-            if(i == 0)
+            if(i == 1||i == 0)
                 str[i][j] = str[i][j];
             else
             {
@@ -48,6 +48,42 @@ int main()
             cout << str[i][j];
         cout << endl;
         */
+       
+        bool Target[21],Sans[21] = {0},flag = 0;
+        int ptr = 0;
+        for(int j = 0;j < 21;j++)
+            Target[j] = 1 - str[i][j];
+        /*
+        cout << "Target" << i << " = ";
+        for(int j = 20;j >= 0;j--)
+            cout << Target[j];
+        cout << endl;
+        */
+
+        if(i > 1)
+            for(int k = 20;k >= 0;k--)
+            {
+                //cout << "edge[ptr][Target[k]]" <<  edge[ptr][Target[k]] << endl;
+
+                if(edge[ptr][ Target[k] ] == -1)
+                {
+                    Sans[k] = 0;
+                    ptr = edge[ptr][ 1 - Target[k] ];
+                }
+                else
+                {
+                    Sans[k] = 1;
+                    ptr = edge[ptr][ Target[k] ];
+                }
+            }
+        /*
+        cout << "Sans" << i << " = ";
+        for(int j = 20;j >= 0;j--)
+            cout << Sans[j];
+        cout << endl;
+        */
+
+
         int where = root;
 
         for(int j = 20;j >= 0;j--)
@@ -59,41 +95,6 @@ int main()
         count[where] = i;
         //cout << "where= " << where << endl;
 
-        bool Target[21],Sans[21] = {0},flag = 0;
-        int ptr = 0;
-        for(int j = 0;j < 21;j++)
-            Target[j] = 1 - str[i][j];
-
-        /*
-        cout << "Target" << i << " = ";
-        for(int j = 20;j >= 0;j--)
-            cout << Target[j];
-        cout << endl;
-        */
-        for(int k = 20;k >= 0;k--)
-        {
-            //cout << "edge[ptr][Target[k]]" <<  edge[ptr][Target[k]] << endl;
-
-            if(edge[ptr][ Target[k] ] == -1)
-            {
-                Sans[k] = 0;
-                ptr = edge[ptr][ 1 - Target[k] ];
-            }
-            else
-            {
-                Sans[k] = 1;
-                ptr = edge[ptr][ Target[k] ];
-            }
-
-        }
-
-
-        /*
-        cout << "Sans" << i << " = ";
-        for(int j = 20;j >= 0;j--)
-            cout << Sans[j];
-        cout << endl;
-        */
         for(int j = 21;j >= 0;j--)
         {
             if(Sans[j] > ans[j])
