@@ -1,3 +1,4 @@
+//not finished -> Version 2
 #include <iostream>
 #define numc 4194303
 
@@ -16,17 +17,6 @@ int newNode()
     count[ind] = 0;
     return ind;
 }
-/*
-void dfs (int i)
-{
-    u[i] = true;
-    for(int j = 0;j < g[i].size();j++)
-    {
-        if(!u[g[i][j])
-            dfs(g[i][j]);
-    }
-}
-*/
 
 int main()
 {
@@ -106,6 +96,10 @@ int main()
                 flag = 1;
                 break;
             }
+            else if(Sans[j] < ans[j])
+            {
+                break;
+            }
         }
         if(flag)
             for(int j = 0;j < 21;j++)
@@ -125,4 +119,3 @@ int main()
     }
     cout << ans_10 << " ";
 }
-

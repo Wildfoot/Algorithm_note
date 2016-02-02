@@ -18,4 +18,21 @@ int main(int argc, char** argv) {
         cout<<q.front()<<",";
         q.pop();
     }
+
+
+
+    deque
+    push_back(x)
+    pop_back(x)
+    push_front()
+    pop_front()
+    size
+    empty
+    clear
+    []//可用中括號存取值
+    deque<int> dq;
+    dq.push_back(0);
+    dq.push_back(1);
+    dq.push_back(2);
+    cout << dq[2];  //cout << 2
 }

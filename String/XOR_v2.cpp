@@ -1,5 +1,6 @@
 #include <iostream>
-#define numc 4194303
+#define numc 8388607
+//#define numc 4194303
 
 using namespace std;
 
