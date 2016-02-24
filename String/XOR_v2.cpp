@@ -1,3 +1,4 @@
+//NTHU7354 Cow XOR
 #include <iostream>
 #define numc 8388607
 //#define numc 4194303

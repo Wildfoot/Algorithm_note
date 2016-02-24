@@ -12,12 +12,13 @@ vector<int> V[100];
 
 void DFS(int n)
 {
+    used[n] = true;
     cout << n << " ";
     for(int e:V[n])
     {
         if(!used[e])
         {
-            used[e] = true;
+            //used[e] = true;
             DFS(e);
         }
     }
