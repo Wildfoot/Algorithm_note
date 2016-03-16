@@ -16,20 +16,23 @@ int bin_search(int arr[], int l, int r, int v) {
 int seq[MAXN];
 int lea[MAXN + 1];
 
-int main() {
+int main() 
+{
     int n;
     cin >> n;
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) 
         cin >> seq[i];
-    }
+
     lea[0] = -INF;
-    for (int i = 1; i <= n; ++i) {
+    for (int i = 1; i <= n; ++i) 
         lea[i] = INF;
-    }
-    for (int i = 0; i < n; ++i) {
+
+    for (int i = 0; i < n; ++i) 
+    {
         int pos = bin_search(lea, 0, n, seq[i]);
         lea[pos] = seq[i];
-        for (int j = 0; j <= n; ++j) {
+        for (int j = 0; j <= n; ++j) 
+        {
             if (lea[j] == -INF)
                 cout << "- ";
             else if (lea[j] == INF)
