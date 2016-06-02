@@ -2,10 +2,10 @@
 
 using namespace std;
 
-void hanoi(int n, int start, int temp, int target)
+void hanoi(int n, int start, int temp, int target)//把n個disk從start經過temp到target
 {
     cout << "hanoi(" << n << ", " << start << ", " << temp << ", " << target << ")" << endl;
-    if(n == 1)
+    if(n == 1)//不用經過temp從start到target
     {
         cout << "move Disk from " << start << " to " << target << endl;
     }
