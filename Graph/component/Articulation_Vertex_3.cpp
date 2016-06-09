@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//bool used[MAXN];
+bool used[MAXN];
 vector<int> V[MAXN];
 int level_t;
 int level[MAXN];
@@ -16,15 +16,17 @@ void DFS(int n)
 {
     level[n] = level_t;
     cout << n << " " << level[n] << endl;
+    used[n] = 1;
+    //cout << n << " ";
     for(int e:V[n])
     {
         level_t++;
-        if(!level[e])
+        if(!used[e])
         {
             DFS(e);
         }
         level_t--;
-        cout << "DFS done" << endl;
+        //cout << "DFS done" << endl;
     }
 
 }
@@ -49,6 +51,8 @@ int main()
         V[a].push_back(b);
         V[b].push_back(a);
     }
+
+
 
     articulation_vertex();
     //DFS(0);
