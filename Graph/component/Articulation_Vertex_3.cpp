@@ -34,6 +34,7 @@ void DFS(int n)
 void articulation_vertex()
 {
     memset(level, 0, sizeof(level));
+    memset(used, 0, sizeof(used));
     level_t = 1;
     //for()
         //if(!)
