@@ -1,94 +1,87 @@
-//尋找一張無向圖上所有的 Articulation Vertex
-//時間複雜度等於一次 DFS 的時間。
-//圖的資料結構為 adjacency matrix ，便是 O(V^2)
-//圖的資料結構為 adjacency lists ，便是 O(V+E)
-
 #include <iostream>
 #include <cstring>
-#define MAXN 9
+#include <vector>
+#include <stack>
+
+#define MAXN 10 //MAX node + 1
 
 using namespace std;
 
-bool adj[9][9]; // 無向圖，adjacency matrix。
-int visit[9];   // DFS遍歷順序，用來判斷祖先與子孫。
-int grand[9];   // 紀錄該點的子孫們用back edge連到的最高祖先。
-                // 例如第4點的子孫們，
-                // 有back edge連到祖先第grand[4]點。
-int t = 0;      // 時刻。
- 
-void DFS(int p, int i)  // 第p點是第i點的父親
+bool used[MAXN];
+vector<int> V[MAXN];
+int level_t;
+int level[MAXN];
+int son_grand[MAXN]; //n的子孫能連到的最高 + 自己如果有連到祖父以上
+bool ap[MAXN];
+
+void DFS(int n, int g) //g是父親
 {
-    visit[i] = ++t;     // 紀錄遍歷順序
-    grand[i] = i;       // 預設為沒找到back edge
- 
-    int child = 0;      // 紀錄第i點有幾個小孩
-    bool ap = false;    // 紀錄第i點是不是關節點
- 
-    for (int j=0; j<9; ++j)         // 進行DFS
-        if (adj[i][j] && j != p)    // 避免回頭路
-            if (visit[j])           // back edge
-            {
-                // 紀錄最高的祖先。
-                if (visit[j] < visit[grand[i]])
-                    grand[i] = j;
-            }
-            else                    // tree edge
-            {
-                child++;
-                DFS(i, j);
- 
-                // 紀錄第i點的子孫們，利用back edge連到的最高祖先。
-                if (visit[grand[i]] < visit[grand[j]])
-                    grand[i] = grand[j];
- 
-                // 第i點的祖先、第i點的其中一棵子樹（樹根為第j點）
-                // 兩者之間缺少back edge，因此第i點為關節點。
-                if (visit[grand[j]] >= visit[i])
-                    ap = true;
-            }
- 
-    // 判斷是不是關節點。樹根和非樹根分開判斷。
-    if (i == p && child > 1 || i != p && ap)
-        cout << "第" << i << "點是關節點" << endl;
+    level[n] = level_t;
+    son_grand[n] = level[n]; //預設自己
+    //cout << "n = " << n << " level[n] = " << level[n] << endl;
+    used[n] = 1;
+    int child = 0;
+    ap[n] = false;
+
+
+    for(int e:V[n])
+    {
+        if(e == g)          //避免回頭路
+            continue;
+
+        level_t++;
+        if(!used[e])
+        {
+            child++;
+            DFS(e, n);
+        }
+        
+        if(son_grand[e] < son_grand[n])
+        {
+            son_grand[n] = son_grand[e];
+        }
+
+        if(son_grand[e] >= level[n])  //有任何一個小孩的son_grand大於自己本身的level(沒有環)
+            ap[n] = true;
+
+        level_t--;
+    }
+
+    cout << "n = " << n << " level[n] = " << level[n] << " child = " << child << " son_grand[n] = " << son_grand[n] << endl;
+
+
+    if(level[n] == 1) //判斷根是否有兩個兒子
+    {
+        ap[n] = false;
+        if(!(child == 1))
+            ap[n] = true;
+    }
 }
- 
+
 void articulation_vertex()
 {
-    // DFS forest
-    memset(visit, 0, sizeof(visit));
-    t = 0;
- 
-    for (int i=0; i<9; ++i)
-        if (!visit[i])
-            DFS(i, i);
-    
+    memset(level, 0, sizeof(level));
+    memset(used, 0, sizeof(used));
+    level_t = 1;
+    DFS(0, 0);
 }
 
 int main()
 {
-    adj[0][1] = 1;
-    adj[1][2] = 1;
-    adj[1][3] = 1;
-    adj[3][4] = 1;
-    adj[0][4] = 1;
-    adj[0][5] = 1;
-    adj[5][6] = 1;
-    adj[6][7] = 1;
-    adj[5][7] = 1;
-    adj[7][8] = 1;
-    adj[7][9] = 1;
-    adj[1][0] = 1;
-    adj[2][1] = 1;
-    adj[3][1] = 1;
-    adj[4][3] = 1;
-    adj[4][0] = 1;
-    adj[5][0] = 1;
-    adj[6][5] = 1;
-    adj[7][6] = 1;
-    adj[7][5] = 1;
-    adj[8][7] = 1;
-    adj[9][7] = 1;
+    int n, m;
+    cin >> n >> m;
+    for(int i = 0;i < m;i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        V[a].push_back(b);
+        V[b].push_back(a);
+    }
+
     articulation_vertex();
     
+    for(int i = 0;i < MAXN;i++)
+        cout << ap[i] << " ";
+    cout << endl;
     return 0;
 }
