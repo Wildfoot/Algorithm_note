@@ -1,0 +1,23 @@
+
+應該是O(logN)
+可是會退化 最慘->O(N)
+
+EX:
+std::map
+std::set
+
+可以代替線段數
+
+主要function
+split merge
+
+struct Treap
+{
+    int key, pri;
+    Treap *L, *R;
+    Treap(int v)
+    {
+        Key = v;
+        pri = rand();
+    }
+}
