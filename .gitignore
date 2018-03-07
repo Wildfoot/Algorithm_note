@@ -1,4 +1,8 @@
 *.swp
+test*
+*~
+peda-session*
+.gdb_history
 
 
 # Compiled Object files
