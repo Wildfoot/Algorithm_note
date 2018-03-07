@@ -53,29 +53,4 @@ int main()
     for(int i = 0;i < sum;i++)
         cout << buf[i] << " ";
 }
-/*void merge(int l,int r,int arr[])
-{
-    if(l == r)
-        return;
-    int m = (l + r) / 2;
-    merge(l,m,arr);
-    merge(m + 1,r,arr);
-    /*$//////////////////////////////////////////////////////////////
-    int lptr = l,rptr = m + 1;
-    while(lptr < m + 1 || rptr <= r)
-    {
-        if(lptr < m + 1 && rptr <= r)
-        {
-            if(arr[lptr] < arr[rptr])
-            {
-                buf[lptr - l + rptr - m - 1] = arr[lptr];
-                lptr++;
-            }
-        }
-    }
-    for(int i = 0;i < r - 1 +1;i++)
-    {
-        arr[l + i] = buf[i];
-    }
-}*/
 
