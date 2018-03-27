@@ -1,5 +1,7 @@
-#include<iostream>
+#include <iostream>
+
 using namespace std;
+
 int ptr,Prime[169]; //168+1
 void Prime_factor(int n)
 {
