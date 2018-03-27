@@ -15,7 +15,7 @@ int find(int n)
 int U(int a,int b)//融合兩個圖
 {
     //優化：將小的接到大的 O(alpha(n))  約等於  O(1)
-    //記路圖大小
+    //紀錄圖大小
     father[find(a)] = find(b);
 }
 
