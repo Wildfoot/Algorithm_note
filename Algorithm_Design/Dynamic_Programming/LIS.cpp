@@ -72,23 +72,27 @@ int main()
         // for output solution (using way "backward")
         vector<int> LIS_record;
         LIS_record.push_back(1);
-        //////////////////////
+        /////////////////////////////////////////////
         for(int i = 1;i < maxN;i++)
         {
             if(num[i] >= LIS.back())
             {
                 LIS.push_back(num[i]);
+                //////////// output /////////////
                 LIS_record.push_back(LIS.size());
+                /////////////////////////////////
                 continue;
             }
             //binarysearch
             int index_to_change = upper_bound(LIS.begin(), LIS.end(), num[i]) - LIS.begin();
             LIS[index_to_change] = num[i];
+            ///////////////// output /////////////////
             LIS_record.push_back(index_to_change + 1);
+            //////////////////////////////////////////
         }
         cout << "length of longest increasing sub-sequence is : " << LIS.size() << endl;
 
-        // output solution
+        ///////////////////////// output solution ///////////////////////////////
         int length_of_lis_now = LIS.size(), next_num_of_lis_now = INF;
         vector<int> LIS_output;
         for(int i = maxN - 1;i >= 0;i--)
@@ -103,6 +107,7 @@ int main()
         for(int i = LIS_output.size() - 1;i >= 0;i--)
             cout << LIS_output[i] << " ";
         cout << endl;
+        //////////////////////////////////////////////////////////////////////////
     }
 
     cout << "Time used = " << (double)clock() / CLOCKS_PER_SEC << endl;
