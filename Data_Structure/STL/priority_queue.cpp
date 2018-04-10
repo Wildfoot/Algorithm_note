@@ -5,6 +5,15 @@
 
 using namespace std;
 
+template<typename T> void print_queue(T& origin_q) {
+    auto q = origin_q;
+    while(!q.empty()) {
+        cout << q.top() << " ";
+        q.pop();
+    }
+    cout << '\n';
+}
+
 class cp{
     public:
     bool operator()(int &a, int &b){
@@ -29,6 +38,7 @@ int main(int argc, char** argv) {
     pq.push(2252);
     pq.push(333);
     
+	print_queue(pq);
     cout<<"pq.top="<<pq.top()<<endl;
     cout<<"length="<<pq.size()<<endl;
     

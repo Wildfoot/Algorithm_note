@@ -1,14 +1,18 @@
+// Depth First Search
+// WildfootW
+// https://github.com/Wildfoot
+
 #include <iostream>
 #include <vector>
 #include <stack>
-#include"memory.h"
+#include <cstring>
 
 using namespace std;
 
-typedef long long ll;
+#define MAX 100
 
-bool used[100]; 
-vector<int> V[100];
+bool used[MAX]; 
+vector<int> V[MAX];
 
 void DFS(int n)
 {
@@ -18,7 +22,6 @@ void DFS(int n)
     {
         if(!used[e])
         {
-            //used[e] = true;
             DFS(e);
         }
     }
@@ -28,19 +31,27 @@ void DFS(int n)
 int main()
 {
 	int n, m;
-	cin >> n >> m;
+    cout << "Amount of node : ";
+	cin >> n;
+    cout << "Amount of edge : ";
+    cin >> m;
+
+/////////////// store the edge in vector //////////////////
+    cout << "Enter the edge : (if a edge link between node 1 and node 3, keyin \"1 3\")" << endl;
 	while ( m-- )
 	{
         int a, b;
 		cin >> a >> b;
-		V[a].push_back(b); 
+		V[a].push_back(b);  //單向圖
+		//V[b].push_back(a); //雙向圖
 	}
 	
-	//Depth First Search
+
+////////////// example 1: using stack //////////////
 	stack<int> qu;
 	qu.push(0);
 
-	memset(used,0,sizeof(used));
+	memset(used, 0, sizeof(used));
 	used[0] = true;
 
 	while ( !qu.empty() )
@@ -50,7 +61,6 @@ int main()
 		cout << k << ' ';
 		for ( int e:V[k] )      //e = 陣列裡的值
 		{
-            //cout << "|" << e <<"|";
 			if ( !used[e] )
 			{
 				used[e] = true; 
@@ -59,8 +69,9 @@ int main()
 		}
 	}
     cout << endl;
-    //function
-	memset(used,0,sizeof(used));
+
+//////////// example 2: using recursive function //////////////
+	memset(used, 0, sizeof(used));
     DFS(0);
 
     return 0;
