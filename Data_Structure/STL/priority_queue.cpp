@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     pq.push(2252);
     pq.push(333);
     
-	print_queue(pq);
+    print_queue(pq);
     cout<<"pq.top="<<pq.top()<<endl;
     cout<<"length="<<pq.size()<<endl;
     
