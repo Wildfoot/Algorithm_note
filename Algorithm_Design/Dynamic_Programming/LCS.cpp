@@ -62,20 +62,27 @@ int find_LCS(int m, int n)
         return LCS[m][n] = max(find_LCS(m - 1, n), find_LCS(m, n - 1));
 }
 
+inline string fix_alignment(string para)
+{
+    const int alignment_num = 3;
+    para.resize(alignment_num, ' ');
+    return para;
+}
+
 void print_LCS()
 {
-    cout << "\t";
+    cout << fix_alignment("");
     for(int i = 0;i < s2.length();i++)
     {
-        cout << s2[i] << "\t";
+        cout << fix_alignment(string(1, s2[i]));
     }
     cout << endl;
     for(int i = 0;i < s1.length();i++)
     {
-        cout << s1[i] << "\t";
+        cout << fix_alignment(string(1, s1[i]));
         for(int j = 0;j < s2.length();j++)
         {
-            cout << LCS[i][j] << "\t";
+            cout << fix_alignment(to_string(LCS[i][j]));
         }
         cout << endl;
     }
@@ -85,23 +92,27 @@ void find_solution_backward(int m, int n)
 {
     if(LCS[m][n] == 0)
         return;
-    if(LCS[m][n] == LCS[m - 1][n])
+    if(m - 1 >= 0 && LCS[m][n] == LCS[m - 1][n])
     {
         find_solution_backward(m - 1, n);
         return;
     }
-    if(LCS[m][n] == LCS[m][n - 1])
+    if(n - 1 >= 0 && LCS[m][n] == LCS[m][n - 1])
     {
         find_solution_backward(m, n - 1);
         return;
     }
-    if(LCS[m][n] == LCS[m - 1][n - 1] + 1)
+    if(m - 1 >= 0 && n - 1 >= 0 && LCS[m][n] == LCS[m - 1][n - 1] + 1)
     {
         LCS_output.push(s1[m]);
         find_solution_backward(m - 1, n - 1);
         return;
     }
-    cout << "WTF" << endl;
+    if(m == 0 || n == 0)
+    {
+        LCS_output.push(s1[m]);
+        return;
+    }
 }
 
 void clear_stack( stack<char> &q )
@@ -117,9 +128,12 @@ int main()
 
     while(!cin.eof())
     {
+        // initial
         memset(LCS, 0, sizeof(LCS));
         memset(LCS_visit, false, sizeof(LCS_visit));
         clear_stack(LCS_output);
+
+        // input
         cout << "keyin two sequence to find longest common sub-sequence :" << endl;
         getline(cin, s1);
         getline(cin, s2);
