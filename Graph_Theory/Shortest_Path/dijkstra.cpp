@@ -12,7 +12,7 @@ struct Edge{
 
 bool operator < (Edge a, Edge b)
 {
-    return a.cost > b.cost;  //priorityq isfrom big to small
+    return a.cost > b.cost;  //normal priority q is from big to small
 }
 
 long long d[1001]; //存在點上的 目前到這點最短的距離
