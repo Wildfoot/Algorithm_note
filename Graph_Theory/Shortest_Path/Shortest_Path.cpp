@@ -56,8 +56,13 @@ using namespace std;
 //                      dis[i][j] = dis[i][k] + dis[k][j];
 //     }
 //
-// - Dijkstra * V times(sometimes better than Floyd)
+// - Dijkstra * V times
 // - SPFA * V times(sometimes better than Floyd)
+//
+////////////////////// output the solution ////////////////////////
+// - Record the previous one
+//     Once relax successfully, update prev[id]
+//
 
 int main()
 {
