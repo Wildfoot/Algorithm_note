@@ -5,8 +5,7 @@
 
 using namespace std;
 
-template<typename T> void print_queue(T& origin_q) {
-    auto q = origin_q;
+template<typename T> void print_queue(T q) {
     while(!q.empty()) {
         cout << q.top() << " ";
         q.pop();
