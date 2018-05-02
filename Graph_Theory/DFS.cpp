@@ -61,7 +61,7 @@ int main()
         {
             if ( !used[e] )
             {
-                used[e] = true; 
+                used[e] = true;
                 qu.push(e);
             }
         }
