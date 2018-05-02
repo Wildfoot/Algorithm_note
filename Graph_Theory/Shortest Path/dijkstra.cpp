@@ -42,7 +42,7 @@ struct custom_compare
 {
     bool operator()(tentative_node &lhs, tentative_node &rhs)
     {
-        return lhs.distance < rhs.distance;
+        return lhs.distance > rhs.distance;
     }
 };
 
@@ -133,7 +133,7 @@ visit(false), tentative_node(-1, -1, INF)
 {
 }
 node::node(const tentative_node& tnode, bool visit):
-tentative_node(tnode.index, tnode.pre_index, tnode.distance)
+tentative_node(tnode.index, tnode.pre_index, tnode.distance), visit(visit)
 {
 }
 tentative_node::tentative_node(int input_index, int input_pre, int input_distance):
