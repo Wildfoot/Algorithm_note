@@ -1,3 +1,54 @@
+// Knuth Morris Pratt algorithm
+//
+//    i
+//    AABZABZABCZ
+//    j
+//    ABZABC
+//
+//    //相同向前走
+//
+//     i
+//    AABZABZABCZ
+//     j
+//    ABZABC
+//
+//    //不同跳回頭
+//
+//     i
+//    AABZABZABCZ
+//    j
+//    ABZABC
+//
+//failure function
+//
+//           0 1 2 3 4 5
+//        i  ^
+//           A B Z A B C      //A(j + 1) != B(i + 1)
+//        j^                  //j = array[j + 1]
+//array     -1                //array[i + 1] = j
+//
+//           0 1 2 3 4 5
+//        i
+//           A B Z A B C
+//        j
+//array     -1-1
+//
+//           0 1 2 3 4 5
+//        i      ^
+//           A B Z A B C      //A(j + 1) == B(i + 1)
+//        j^                  //j++
+//array     -1-1-1            //array[i + 1] = j(已++)
+//
+//           0 1 2 3 4 5
+//        i
+//           A B Z A B C
+//        j
+//array     -1-1-1 0
+//
+//           0 1 2 3 4 5
+//        i
+//           A B Z A B C
+
 #include <iostream>
 #define MAXN 1<<10
 using namespace std;
@@ -18,7 +69,6 @@ int failure_function()
         }
         else
         {
-
             j = failure_array[j + 1];
             failure_array[i + 1] = j;
         }
@@ -40,8 +90,11 @@ int main()
     //DEBUG
     for(int i = 0;i < s.length();i++)
     {
-        cout << failure_array[i] << " ";
+        clog << failure_array[i] << " ";
     }
-    cout << endl << s << endl;
+    clog << endl;
+
+    cout << s << endl;
+
     return 0;
 }
