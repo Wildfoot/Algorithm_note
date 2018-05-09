@@ -6,8 +6,6 @@
  *
  */
 
-// Wrong Answer
-
 #include <iostream>
 #include <ctime>
 #include <queue>
