@@ -22,12 +22,10 @@ int failure_function()
             j = failure_array[j + 1];
             failure_array[i + 1] = j;
         }
-        
         if(failure_array[i + 1] == s2.length() - 1)
             return i + 1 - s2.length();
     }
-     
-    return -1; 
+    return -1;
 }
 
 int main()
@@ -38,8 +36,6 @@ int main()
 
     int ans = failure_function();
     cout << ans << " ~ " << ans + s2.length() << endl;
-
-
 
     //DEBUG
     for(int i = 0;i < s.length();i++)

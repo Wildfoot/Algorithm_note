@@ -1,12 +1,9 @@
 prefix : KMP AC automata
 Suffix : Suffix Array , Suffix Auto mata
-Palindrome: 
+Palindrome:
 Trit
 
-
-
-
-abbcc 
+abbcc
 prefix " " a ab abb abbc abbcc
 suffix abbcc bbcc bcc cc c " "
 
@@ -14,7 +11,7 @@ AC automata UVa10226
     cow Xor virtual_judge
 
 LCP
-Longest Common Prefix 
+Longest Common Prefix
 排序後 兩兩取相同 最後取min
 
 Suffix Array
@@ -29,5 +26,4 @@ banana/0
 5na#         4       1
 6nana#       2       0
             SA      Rank
-
 
