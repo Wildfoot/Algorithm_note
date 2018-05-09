@@ -46,6 +46,6 @@ int main()
     function_unsized_array(param);
 
     cout << "Time used = " << (double)clock() / CLOCKS_PER_SEC << endl;
-    return 0;   
+    return 0;
 }
 

@@ -11,7 +11,7 @@ using namespace std;
 
 #define MAX 100
 
-bool used[MAX]; 
+bool used[MAX];
 vector<int> V[MAX];
 
 void DFS(int n)
