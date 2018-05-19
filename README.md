@@ -3,6 +3,7 @@ My algorithm notes
 
 ## map
 
+```bash
 ├── Misc
 │   ├── Basic
 │   │   ├── binarysearch.cpp
@@ -38,8 +39,12 @@ My algorithm notes
 ├── Data_Structure
 │   ├── Segment
 │   │   ├── Fake_Segment_Tree.cpp
-│   │   ├── Treap.cpp
-│   └── Standard Template Library
+│   │   └── Treap.cpp
+│   ├── Standard Template Library
+│   │ 
+│   └── tree
+│       ├── Randomized_binary_search_tree.cpp
+│       └── tree.cpp
 │ 
 
 ├── Number_Theory
@@ -49,7 +54,6 @@ My algorithm notes
 │   │   ├── bigN.cpp
 │   │   └── My_bigN.cpp
 │   └── Prime
-│       ├── a.out
 │       ├── Factor_number.cpp
 │       └── Make_prime.cpp
 │ 
@@ -65,29 +69,33 @@ My algorithm notes
 │   │   │   └── Cut_vertex.cpp
 │   │   └── Strong Connected Component
 │   │       ├── Kosaraju.cpp
+│   │       ├── Tarjan.cpp [TODO]
 │   │       └── Strong_Connected_Component.cpp
 │   ├── Minimum Spanning Tree
 │   │   ├── Kruskal.cpp
+│   │   ├── Prim.cpp [TODO]
 │   │   ├── Minimum_Spanning_Tree.cpp
 │   ├── Shortest Path
+│   │   ├── Bellman_Ford.cpp [TODO]
+│   │   ├── SPFA.cpp [TODO]
 │   │   ├── dijkstra.cpp
+│   │   ├── Floyd.cpp [TODO]
 │   │   └── Shortest_Path.cpp
-│   ├── calculator
-│   │   ├── calculator.cpp
-│   │   └── math.cpp
 │   ├── General graph with Weighted match
 │   │   ├── hungarian.cpp
 │   │   └── Kuhn-Munkres.cpp
-│   ├── Randomized_binary_search_tree.cpp
-│   └── tree.cpp
+│   ├── calculator
+│   │   ├── calculator.cpp
+│   │   └── math.cpp
 │ 
 
 ├── Stringology
 │   ├── String Matching
-│   │   ├── AC_Automaton.cpp
+│   │   ├── AC_Automaton.cpp [TODO]
 │   │   ├── KMP.cpp
+│   │   ├── Hash.cpp [TODO]
 │   ├── Stringology.cpp
-│   ├── Trie.cpp
+│   ├── Trie.cpp [TODO]
 │   ├── XOR.cpp
 │ 
 
@@ -102,4 +110,4 @@ My algorithm notes
 
 ├── Numerical_Method
 │ 
-
+```
