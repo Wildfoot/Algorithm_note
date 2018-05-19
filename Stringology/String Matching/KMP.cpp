@@ -1,100 +1,174 @@
-// Knuth Morris Pratt algorithm
+/* Knuth Morris Pratt algorithm
+ * Version 
+ * Author: WildfootW
+ * GitHub: github.com/Wildfoot
+ * Copyright (C) 2018 WildfootW All rights reserved.
+ *
+ */
+
+//  define Fail function
+//      能知道匹配失敗時,B 要對齊哪裡繼續匹配(適用於B有重複子字串)
+//      後衍生為將B字串放在前面直接使用這步比對字串
 //
-//    i
-//    AABZABZABCZ
-//    j
-//    ABZABC
-//
-//    //相同向前走
-//
-//     i
-//    AABZABZABCZ
-//     j
-//    ABZABC
-//
-//    //不同跳回頭
-//
-//     i
-//    AABZABZABCZ
-//    j
-//    ABZABC
-//
-//failure function
+//           0 1 2 3 4 5        //S[j + 1] != S[i + 1]
+//           A B Z A B C        //j = fail(j + 1)
+//        i  ^                  //fail(i + 1) = j
+//        j^
+//fail()    -1
 //
 //           0 1 2 3 4 5
-//        i  ^
-//           A B Z A B C      //A(j + 1) != B(i + 1)
-//        j^                  //j = array[j + 1]
-//array     -1                //array[i + 1] = j
-//
-//           0 1 2 3 4 5
-//        i
 //           A B Z A B C
-//        j
-//array     -1-1
+//        i    ^
+//        j^
+//fail()    -1-1
+//
+//           0 1 2 3 4 5        //S[j + 1] == S[i + 1]
+//           A B Z A B C        //j++
+//        i      ^              //fail(i + 1) = j
+//        j^
+//fail()    -1-1-1
 //
 //           0 1 2 3 4 5
-//        i      ^
-//           A B Z A B C      //A(j + 1) == B(i + 1)
-//        j^                  //j++
-//array     -1-1-1            //array[i + 1] = j(已++)
-//
-//           0 1 2 3 4 5
-//        i
 //           A B Z A B C
-//        j
-//array     -1-1-1 0
+//        i        ^
+//        j  ^
+//fail()    -1-1-1 0
 //
 //           0 1 2 3 4 5
-//        i
 //           A B Z A B C
+//        i          ^
+//        j    ^
+//fail()    -1-1-1 0 1
+//
+//           0 1 2 3 4 5
+//           A B Z A B C
+//        i            ^
+//        j^
+//fail()    -1-1-1 0 1-1
 
 #include <iostream>
-#define MAXN 1<<10
+#include <ctime>
+
+#define INF 2147483647
+#define EPS 1e-9
+
 using namespace std;
 
-int failure_array[MAXN] = {-1};
-
-string s, s1, s2;
-
-int failure_function()
+class KMP
 {
-    int n = s.length();
-    for(int i = 0, j = -1;i < (n - 1);i++)
-    {
-        if(s[i + 1] == s[j + 1])
+    private:
+        inline string fix_alignment(string para)   //DEBUG
         {
-            failure_array[i + 1] = j + 1;
+            const int alignment_num = 3;
+            para.resize(alignment_num, ' ');
+            return para;
+        }
+
+    protected:
+        int * failure;
+        string stringA, stringB;
+        int substring_position; //answer stringA[substring_position] == stringB[0]
+
+    public:
+        void calculate_failure();
+        void matching();
+        void print_failure() //DEBUG
+        {
+            for(int i = 0;i < stringB.length();i++)
+                clog << fix_alignment(string(1, stringB[i]));
+            clog << endl;
+            for(int i = 0;i < stringB.length();i++)
+                clog << fix_alignment(to_string(failure[i]));
+            clog << endl;
+        }
+        int answer()
+        {
+            if(substring_position == -1)
+            {
+                clog << "no matching!" << endl;
+            }
+            else
+            {
+                clog << "matching!" << endl;
+                clog << stringA << endl;
+                for(int i = 0;i < substring_position;i++)
+                    clog << " ";
+                clog << stringB << endl;
+            }
+            return substring_position;
+        }
+
+        KMP(string A, string B):
+            stringA(A), stringB(B)
+        {
+            substring_position = -1;
+            failure = new int[stringB.length()];
+        }
+        ~KMP()
+        {
+            delete[] failure;
+        }
+};
+
+int main()
+{
+    //ios::sync_with_stdio(false);
+    //cin.tie(0);
+
+    while(true)
+    {
+        string stringA, stringB;
+        cout << "String A: ";
+        getline(cin, stringA);
+        cout << "String B: ";
+        getline(cin, stringB);
+
+        KMP test{stringA, stringB};
+        test.calculate_failure();
+        test.print_failure();
+        test.matching();
+        test.answer();
+    }
+    clog << "Time used = " << (double)clock() / CLOCKS_PER_SEC << endl;
+    return 0;
+}
+
+void KMP::calculate_failure()
+{
+    for(int i = 0;i < stringB.length();i++)
+        failure[i] = -1;
+    for(int i = 0, j = -1;(i + 1) < stringB.length();i++)
+    {
+        if(stringB[i + 1] == stringB[j + 1])
+        {
+            failure[i + 1] = j + 1;
             j++;
         }
         else
         {
-            j = failure_array[j + 1];
-            failure_array[i + 1] = j;
+            j = failure[j + 1];
+            failure[i + 1] = j;
         }
-        if(failure_array[i + 1] == s2.length() - 1)
-            return i + 1 - s2.length();
     }
-    return -1;
 }
-
-int main()
+void KMP::matching()
 {
-    getline(cin, s1);
-    getline(cin, s2);
-    s = s2 + s1;
-
-    int ans = failure_function();
-    cout << ans << " ~ " << ans + s2.length() << endl;
-
-    //DEBUG
-    for(int i = 0;i < s.length();i++)
+    int cur_pos = 0;
+    for(int i = 0;i < stringA.length();i++)
     {
-        clog << failure_array[i] << " ";
+        if(stringA[i] == stringB[cur_pos])
+        {
+            cur_pos++;
+        }
+        else
+        {
+            cur_pos = failure[cur_pos] + 1;
+        }
+        if(cur_pos == stringB.length())
+        {
+            substring_position = i - stringB.length() + 1;
+            return;
+        }
     }
-    clog << endl;
-
-    cout << s << endl;
-
-    return 0;
+    return;
 }
