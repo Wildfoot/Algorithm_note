@@ -29,6 +29,8 @@ inline string _fixstr(char para, int alignment_num = DEFAULT_FIXSTR)
 inline string _fixstr(int para, int alignment_num = DEFAULT_FIXSTR)
 {
     string ret = to_string(para);
+    if(para == INF)
+        ret = "INF";
     return _fixstr(ret, alignment_num);
 }
 
@@ -59,19 +61,14 @@ private:
     }
     void _print_pipe_status()
     {
-        static bool first_time = true;
-        if(first_time)
+        clog << "==== capacity ====" << endl;
+        for(int i = 0;i < node_num;i++)
         {
-            first_time = false;
-            clog << "==== capacity ====" << endl;
-            for(int i = 0;i < node_num;i++)
+            for(int j = 0;j < node_num;j++)
             {
-                for(int j = 0;j < node_num;j++)
-                {
-                    clog << _fixstr(capacity[i][j]);
-                }
-                clog << endl;
+                clog << _fixstr(capacity[i][j]);
             }
+            clog << endl;
         }
         clog << "====== flow ======" << endl;
         for(int i = 0;i < node_num;i++)
@@ -172,7 +169,7 @@ public:
         int ret = 0;
         while(true)
         {
-            _print_pipe_status();   //DEBUG
+            //_print_pipe_status();   //DEBUG
             if(!Depth_First_Search())
                 break;
             ret += find_bottleneck();
@@ -189,16 +186,11 @@ protected:
     int super_source_node, super_sink_node;
 public:
     Multi_ST_Ford_Fulkerson(int origin_node_num, int origin_pipe_num):
-        origin_node_num(origin_node_num), origin_pipe_num(origin_pipe_num)
+        origin_node_num(origin_node_num), origin_pipe_num(origin_pipe_num), Ford_Fulkerson(origin_node_num + 2, origin_pipe_num)  //pipe num is not correct yet
     {
-        Ford_Fulkerson::Ford_Fulkerson(origin_node_num + 2, origin_pipe_num);      //pipe num is not correct yet
         set_ST(super_source_node = origin_node_num, super_sink_node = origin_node_num + 1);     //super source(N) and sink(N + 1) node
         source_node_num = 0;
         sink_node_num = 0;
-    }
-    ~Multi_ST_Ford_Fulkerson()
-    {
-        Ford_Fulkerson::~Ford_Fulkerson();
     }
     void add_source_node(int node_no)
     {
@@ -230,6 +222,39 @@ int main()
         Ford_Fulkerson Test{node_num, pipe_num};
         Test.set_ST(--source, --sink);
 
+        for(int i = 0;i < pipe_num;i++)
+        {
+            int from, to, capacity;
+            cin >> from >> to >> capacity;
+            Test.add_pipe(--from, --to, capacity);
+        }
+        int answer = Test.process();
+        cout << answer << endl;
+    }
+
+    while(cin >> node_num >> pipe_num)// multi-source and multi-sink
+    {
+        if(!node_num && !pipe_num)
+            break;
+
+        Multi_ST_Ford_Fulkerson Test{node_num, pipe_num};
+
+        int source_num, sink_num;
+
+        cin >> source_num;
+        for(int i = 0;i < source_num;i++)
+        {
+            int node_no;
+            cin >> node_no;
+            Test.add_source_node(--node_no);
+        }
+        cin >> sink_num;
+        for(int i = 0;i < sink_num;i++)
+        {
+            int node_no;
+            cin >> node_no;
+            Test.add_sink_node(--node_no);
+        }
         for(int i = 0;i < pipe_num;i++)
         {
             int from, to, capacity;

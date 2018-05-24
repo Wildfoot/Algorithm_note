@@ -3,7 +3,7 @@ test*
 *~
 peda-session*
 .gdb_history
-
+test*.in
 
 # Compiled Object files
 
@@ -36,6 +36,3 @@ peda-session*
 *.app
 output
 
-# import
-*.in
-input
