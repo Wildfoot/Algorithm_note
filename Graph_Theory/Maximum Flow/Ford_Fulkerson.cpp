@@ -3,7 +3,7 @@
  * Author: WildfootW
  * GitHub: github.com/Wildfoot
  * Copyright (C) 2018 WildfootW All rights reserved.
- * Node No. from 0 ~ N-1
+ * Node No.  input-1~N  code-0~N-1
  */
 
 #include <iostream>
@@ -12,8 +12,27 @@
 
 #define INF 2147483647
 #define EPS 1e-9
+#define DEFAULT_FIXSTR 3
 
 using namespace std;
+
+inline string _fixstr(string para, int alignment_num = DEFAULT_FIXSTR)
+{
+    para.resize(alignment_num, ' ');
+    return para;
+}
+inline string _fixstr(char para, int alignment_num = DEFAULT_FIXSTR)
+{
+    string ret = string(1, para);
+    return _fixstr(ret, alignment_num);
+}
+inline string _fixstr(int para, int alignment_num = DEFAULT_FIXSTR)
+{
+    string ret = to_string(para);
+    return _fixstr(ret, alignment_num);
+}
+
+/* code start here */
 
 class Ford_Fulkerson
 {
@@ -38,11 +57,6 @@ private:
         }
         return false;
     }
-    inline string _fixstr(string para, int alignment_num)   //DEBUG string(1, char) to_string(int)
-    {
-        para.resize(alignment_num, ' ');
-        return para;
-    }
     void _print_pipe_status()
     {
         static bool first_time = true;
@@ -54,7 +68,7 @@ private:
             {
                 for(int j = 0;j < node_num;j++)
                 {
-                    clog << _fixstr(to_string(capacity[i][j]), 3);
+                    clog << _fixstr(capacity[i][j]);
                 }
                 clog << endl;
             }
@@ -64,7 +78,7 @@ private:
         {
             for(int j = 0;j < node_num;j++)
             {
-                clog << _fixstr(to_string(flow[i][j]), 3);
+                clog << _fixstr(flow[i][j]);
             }
             clog << endl;
         }
@@ -73,7 +87,7 @@ private:
         {
             for(int j = 0;j < node_num;j++)
             {
-                clog << _fixstr(to_string(capacity[i][j] - flow[i][j]), 3);
+                clog << _fixstr(capacity[i][j] - flow[i][j]);
             }
             clog << endl;
         }
@@ -158,14 +172,46 @@ public:
         int ret = 0;
         while(true)
         {
-            //_print_pipe_status();   //DEBUG
+            _print_pipe_status();   //DEBUG
             if(!Depth_First_Search())
                 break;
             ret += find_bottleneck();
         }
         return ret;
     }
+};
 
+class Multi_ST_Ford_Fulkerson: public Ford_Fulkerson
+{
+protected:
+    int origin_node_num, origin_pipe_num;
+    int source_node_num, sink_node_num;
+    int super_source_node, super_sink_node;
+public:
+    Multi_ST_Ford_Fulkerson(int origin_node_num, int origin_pipe_num):
+        origin_node_num(origin_node_num), origin_pipe_num(origin_pipe_num)
+    {
+        Ford_Fulkerson::Ford_Fulkerson(origin_node_num + 2, origin_pipe_num);      //pipe num is not correct yet
+        set_ST(super_source_node = origin_node_num, super_sink_node = origin_node_num + 1);     //super source(N) and sink(N + 1) node
+        source_node_num = 0;
+        sink_node_num = 0;
+    }
+    ~Multi_ST_Ford_Fulkerson()
+    {
+        Ford_Fulkerson::~Ford_Fulkerson();
+    }
+    void add_source_node(int node_no)
+    {
+        source_node_num++;
+        pipe_num++;
+        add_pipe(super_source_node, node_no, INF);
+    }
+    void add_sink_node(int node_no)
+    {
+        sink_node_num++;
+        pipe_num++;
+        add_pipe(node_no, super_sink_node, INF);
+    }
 };
 
 int main()
