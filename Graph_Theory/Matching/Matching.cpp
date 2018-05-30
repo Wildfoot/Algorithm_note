@@ -62,6 +62,22 @@ inline string _fixstr(int para, int alignment_num = DEFAULT_FIXSTR)
 //          Hungarian Algorithm
 //          Kuhn-Munkres Algorithm
 //
+// Alternating Path 交錯路徑
+// Alternating Cycle 交錯環
+// Augmenting Path 擴充路徑     第一個點和最後一個點都是未匹配點的一條交錯路徑
+//
+// Augmenting Path Theorem
+//      從圖上任取一個未匹配點，如果找不到以此點作為端點的擴充路徑，那麼這張圖會有一些最大匹配不會包含此點。更進一步來說，就算從這張圖上刪除此點（以及相連的邊），以剩餘的點和邊，還是可以找到原本那張圖的其中一些最大匹配。
+// 找最大匹配的手段：
+//      1. 一開始圖上所有點都是未匹配點。
+//      2. 將圖上每一個未匹配點都嘗試作為擴充路徑的端點：
+//      　甲、如果找得到擴充路徑：
+//      　　　沿著擴充路徑修改現有匹配，以增加Cardinality。
+//      　　　（此未匹配點變成了匹配點。）
+//      　乙、如果找不到擴充路徑：
+//      　　　直接刪除此點。繼續下去仍然可以找到原圖的其中一個最大匹配。
+//      　　　（此未匹配點被刪除。）
+//
 
 int main()
 {
