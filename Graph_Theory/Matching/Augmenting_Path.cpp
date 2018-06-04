@@ -9,7 +9,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
-#include <array>
+#include <set>
 
 #define INF 2147483647
 #define EPS 1e-9
@@ -35,7 +35,7 @@ inline string _fixstr(int para, int alignment_num = DEFAULT_FIXSTR)
     return _fixstr(ret, alignment_num);
 }
 
-// 1. 枚舉左邊這群的每個點，嘗試找尋augmenting path
+// 1. 枚舉左（右）邊這群的每個點，嘗試找尋augmenting path
 // 2. 每次找到augmenting path，對調匹配與未匹配邊
 /* code start here */
 class normal_vector_graph
@@ -70,9 +70,9 @@ private:
         _visited[current] = true;
         vector<int> & current_node = nodes[current];
         if(is_left)
-            left_side.push_back(current);
+            left_side.insert(current);
         else
-            right_side.push_back(current);
+            right_side.insert(current);
 
         for(int e:current_node)
         {
@@ -83,7 +83,7 @@ private:
         }
     }
 protected:
-    vector<int> left_side, right_side;
+    set<int> left_side, right_side;
 public:
     Bipartite(int node_num):
         normal_vector_graph(node_num)
@@ -116,6 +116,72 @@ public:
         clog << endl;
     }
 };
+class Augmenting_Path: public Bipartite
+{
+private:
+    bool * _visited;
+    bool * _is_matched;
+    bool _DFS(int current_node)
+    {
+        _visited[current_node] = true;
+        for(int e:nodes[current_node])
+        {
+            if(!_visited[e])
+            {
+                //e unmatched and is left
+                if(!_is_matched[e] && left_side.find(e) != left_side.end())
+                {
+                    _is_matched[e] = true;
+                    return true;
+                }
+                if(_DFS(e))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+protected:
+public:
+    Augmenting_Path(int node_num):
+        Bipartite(node_num)
+    {
+        _visited = new bool[node_num];
+        _is_matched = new bool[node_num];
+    }
+    int calculate_maximum_cardinality_match()
+    {
+        int matched_edge_num = 0;
+        for(int i = 0;i < node_num;i++)
+        {
+            _is_matched[i] = false;
+        }
+        for(int e:right_side)
+        {
+            if(!_is_matched[e])
+            {
+                for(int i = 0;i < node_num;i++)
+                {
+                    _visited[i] = false;
+                }
+                if(_DFS(e))
+                {
+                    _is_matched[e] = true;
+                    matched_edge_num++;
+                }
+            }
+        }
+        return matched_edge_num;
+    }
+    void _print_matched()
+    {
+        for(int i = 0;i < node_num;i++)
+        {
+            cout << "_is_matched[" << i << "] = " << _is_matched[i] << endl;
+        }
+    }
+};
 
 int main()
 {
@@ -128,7 +194,9 @@ int main()
         if(!node_num && !edge_num)
             break;
 
-        Bipartite test{node_num};
+        //Bipartite test{node_num};
+        Augmenting_Path test{node_num};
+        int ans;
 
         for(int i = 0;i < edge_num;i++)
         {
@@ -138,6 +206,9 @@ int main()
         }
         test.create_bipartite_graph();
         test._print_bipartite(); //DEBUG
+        ans = test.calculate_maximum_cardinality_match();
+        test._print_matched();
+        cout << "maximum cardinality match: " << ans << endl;
     }
 
     clog << "Time used = " << (double)clock() / CLOCKS_PER_SEC << endl;
