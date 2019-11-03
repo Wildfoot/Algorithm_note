@@ -7,7 +7,7 @@ int father[MAX];
 
 int find(int n)
 {
-    if(father[n] == n)return n;
+    if(father[n] == n) return n;
     father[n] = find(father[n]); //優化father[n] -> 最後的father
     return father[n];
 }
