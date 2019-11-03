@@ -33,13 +33,13 @@ inline int union_set(int a, int b)
 
 class edge
 {
-    public:
-        int u, v;
-        int cost;
-        edge(int input_u, int input_v, int input_cost):
-            u(input_u), v(input_v), cost(input_cost)
-        {
-        }
+public:
+    int u, v;
+    int cost;
+    edge(int input_u, int input_v, int input_cost):
+        u(input_u), v(input_v), cost(input_cost)
+    {
+    }
 };
 
 struct custom_compare
