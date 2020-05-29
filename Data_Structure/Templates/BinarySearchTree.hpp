@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2005-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef BST_H
-#define BST_H
+#ifndef BINARYSEARCHTREE_HPP
+#define BINARYSEARCHTREE_HPP
 
 #include <cassert>
 
@@ -275,4 +275,4 @@ private:
     }
 };
 
-#endif // BST_H
+#endif // BINARYSEARCHTREE_HPP

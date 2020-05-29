@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2009-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef MY_CACHE_H
-#define MY_CACHE_H
+#ifndef CACHE_HPP
+#define CACHE_HPP
 
 using namespace std;
 
@@ -72,4 +72,4 @@ private:
     CacheNode*     _cache;
 };
 
-#endif // MY_CACHE_H
+#endif // CACHE_HPP

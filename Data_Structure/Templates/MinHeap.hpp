@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2014-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef MY_MIN_HEAP_H
-#define MY_MIN_HEAP_H
+#ifndef MINHEAP_HPP
+#define MINHEAP_HPP
 
 #include <algorithm>
 #include <vector>
@@ -99,4 +99,4 @@ private:
     inline static size_t rchild(const size_t& x) { return x * 2 + 1; }
 };
 
-#endif // MY_MIN_HEAP_H
+#endif // MINHEAP_HPP

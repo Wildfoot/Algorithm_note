@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2005-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef ARRAY_HPP
+#define ARRAY_HPP
 
 #include <cassert>
 #include <algorithm>
@@ -153,4 +153,4 @@ private:
 
 };
 
-#endif // ARRAY_H
+#endif // ARRAY_HPP

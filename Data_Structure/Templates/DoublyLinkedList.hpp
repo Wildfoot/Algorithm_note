@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2005-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef DLIST_H
-#define DLIST_H
+#ifndef DOUBLYLINKEDLIST_HPP
+#define DOUBLYLINKEDLIST_HPP
 
 #include <cassert>
 
@@ -236,4 +236,4 @@ private:
     }
 };
 
-#endif // DLIST_H
+#endif // DOUBLYLINKEDLIST_HPP

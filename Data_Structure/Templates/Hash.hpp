@@ -11,8 +11,8 @@
  * Copyleft (C) 2019 WildfootW
  */
 
-#ifndef MY_HASH_H
-#define MY_HASH_H
+#ifndef HASH_HPP
+#define HASH_HPP
 
 #include <vector>
 #include <cassert>
@@ -362,4 +362,4 @@ private:
     HashSet<HashNode> _hash_set;
 };
 
-#endif // MY_HASH_H
+#endif // HASH_HPP
