@@ -1,10 +1,9 @@
-/****************************************************************************
-  FileName     [ bst.h ]
-  PackageName  [ util ]
-  Synopsis     [ Define binary search tree package ]
-  Author       [ Chung-Yang (Ric) Huang ]
-  Copyright    [ Copyleft(c) 2005-present LaDs(III), GIEE, NTU, Taiwan ]
-****************************************************************************/
+/*
+ * Author: Chung-Yang (Ric) Huang, WildfootW
+ * GitHub: github.com/WildfootW
+ * Copyleft (c) 2009-present LaDs(III), GIEE, NTU, Taiwan
+ * Copyleft (C) 2020 WildfootW all rights reversed
+ */
 
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
@@ -17,9 +16,6 @@ template <class T> class BSTree;
 
 // BSTreeNode is supposed to be a private class. User don't need to see it.
 // Only BSTree and BSTree::iterator can access it.
-//
-// DO NOT add any public data member or function to this class!!
-//
 template <class T>
 class BSTreeNode
 {

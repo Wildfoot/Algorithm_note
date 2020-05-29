@@ -6,8 +6,8 @@
   Copyright    [ Copyleft(c) 2005-present LaDs(III), GIEE, NTU, Taiwan ]
 ****************************************************************************/
 
-#ifndef ARRAY_HPP
-#define ARRAY_HPP
+#ifndef DYNAMICARRAY_HPP
+#define DYNAMICARRAY_HPP
 
 #include <cassert>
 #include <algorithm>
@@ -153,4 +153,4 @@ private:
 
 };
 
-#endif // ARRAY_HPP
+#endif // DYNAMICARRAY_HPP
