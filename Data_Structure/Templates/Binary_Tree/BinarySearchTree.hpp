@@ -12,72 +12,74 @@
 
 using namespace std;
 
-template <class T> class BSTree;
+template <class Data> class BSTree;
 
 // BSTreeNode is supposed to be a private class. User don't need to see it.
 // Only BSTree and BSTree::iterator can access it.
-template <class T>
+template <class Data>
 class BSTreeNode
 {
-    friend class BSTree<T>;
-    friend class BSTree<T>::iterator;
+    friend class BSTree<Data>;
+    friend class BSTree<Data>::iterator;
 
-    BSTreeNode(const T& d, BSTreeNode<T>* parent = NULL, BSTreeNode<T>* rchild = NULL, BSTreeNode<T>* lchild = NULL): _data(d), _parent(parent), _rchild(rchild), _lchild(lchild){
+    BSTreeNode(const Data& d, BSTreeNode<Data>* parent = nullptr, BSTreeNode<Data>* rchild = nullptr, BSTreeNode<Data>* lchild = nullptr):
+        _data(d), _parent(parent), _rchild(rchild), _lchild(lchild)
+    {
         update_size();
     }
 
     void update_size()
     {
         _size = 1;
-        if(_rchild != NULL)
+        if(_rchild != nullptr)
             _size += _rchild->_size;
-        if(_lchild != NULL)
+        if(_lchild != nullptr)
             _size += _lchild->_size;
     }
-    BSTreeNode<T>* get_rchild_end()    // find maximal
+    BSTreeNode<Data>* get_rchild_end() const       // find maximal
     {
-        BSTreeNode<T>* ret(this);
-        while(ret->_rchild != NULL)
+        //BSTreeNode<Data>* ret(this);
+        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        while(ret->_rchild != nullptr)
             ret = ret->_rchild;
         return ret;
     }
-    BSTreeNode<T>* get_lchild_end()    // find minimal
+    BSTreeNode<Data>* get_lchild_end() const       // find minimal
     {
-        BSTreeNode<T>* ret(this);
-        while(ret->_lchild != NULL)
+        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        while(ret->_lchild != nullptr)
             ret = ret->_lchild;
         return ret;
     }
-    BSTreeNode<T>* get_lparent_end()
+    BSTreeNode<Data>* get_lparent_end() const
     {
-        BSTreeNode<T>* ret(this);
-        while(ret->_parent != NULL && ret->_parent->_rchild == ret)
+        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        while(ret->_parent != nullptr && ret->_parent->_rchild == ret) // Guarantee it is left parent
             ret = ret->_parent;
         return ret;
     }
-    BSTreeNode<T>* get_rparent_end()
+    BSTreeNode<Data>* get_rparent_end() const
     {
-        BSTreeNode<T>* ret(this);
-        while(ret->_parent != NULL && ret->_parent->_lchild == ret)
+        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        while(ret->_parent != nullptr && ret->_parent->_lchild == ret)
             ret = ret->_parent;
         return ret;
     }
 
-    T               _data;
-    BSTreeNode<T>*  _parent;
-    BSTreeNode<T>*  _rchild;
-    BSTreeNode<T>*  _lchild;
-    size_t          _size;       // number of childs (include itself)
+    Data              _data;
+    BSTreeNode<Data>* _parent;
+    BSTreeNode<Data>* _rchild;
+    BSTreeNode<Data>* _lchild;
+    size_t            _size;       // number of childs (include itself)
 };
 
-
-template <class T>
+template <class Data>
 class BSTree
 {
 public:
     BSTree()
     {
-        _maximum = new BSTreeNode<T>(T());
+        _maximum = new BSTreeNode<Data>(Data());
     }
     ~BSTree() { clear(); delete _maximum; }
 
@@ -86,28 +88,30 @@ public:
         friend class BSTree;
 
     public:
-        iterator(BSTreeNode<T>* n = 0): _node(n) {}
+        iterator(BSTreeNode<Data>* n = nullptr): _node(n) {}
         iterator(const iterator& i) : _node(i._node) {}
         ~iterator() {} // Should NOT delete _node
 
-        const T& operator * () const { return _node->_data; }
-        T& operator * () { return _node->_data; }
+        const Data& operator * () const { return _node->_data; }
+              Data& operator * ()       { return _node->_data; }
 
         iterator& operator = (const iterator& i) { this->_node = i._node; return (*this); }
 
         bool operator == (const iterator& i) const { return (this->_node == i._node); }
         bool operator != (const iterator& i) const { return !((*this) == i); }
 
-        iterator& operator ++ () {                                                  // Successor (return NULL if _node is maximum)
-            if(_node->_rchild != NULL)
+        iterator& operator ++ ()     // Successor (return nullptr if _node is maximum)
+        {
+            if(_node->_rchild != nullptr)
                 _node = _node->_rchild->get_lchild_end();
             else
                 _node = _node->get_lparent_end()->_parent;
             return (*this);
         }
         iterator operator ++ (int) { iterator ret(*this); ++(*this); return ret; }  // postfix
-        iterator& operator -- () {                                                  // Predecessor (return NULL if _node is minimum)
-            if(_node->_lchild != NULL)
+        iterator& operator -- ()     // Predecessor (return nullptr if _node is minimum)
+        {
+            if(_node->_lchild != nullptr)
                 _node = _node->_lchild->get_rchild_end();
             else
                 _node = _node->get_rparent_end()->_parent;
@@ -130,7 +134,7 @@ public:
         }
 
     private:
-        BSTreeNode<T>* _node;
+        BSTreeNode<Data>* _node;
     };
 
     iterator begin() const { return iterator(_maximum->get_lchild_end()); }
@@ -140,22 +144,23 @@ public:
     bool empty() const { return (size() == 0); }
     size_t size() const { return (_maximum->_size - 1); }
 
-    void insert(const T& x) {
+    void insert(const Data& x)
+    {
         if(empty())
         {
-            BSTreeNode<T>* new_node = new BSTreeNode<T>(x, _maximum);
+            BSTreeNode<Data>* new_node = new BSTreeNode<Data>(x, _maximum);
             _maximum->_lchild = new_node;
             _maximum->_size = 2;
             return;
         }
-        BSTreeNode<T>* current = _maximum->_lchild;
+        BSTreeNode<Data>* current = _maximum->_lchild;
         while(true)
         {
             if(current->_data >= x)
             {
-                if(current->_lchild == NULL)
+                if(current->_lchild == nullptr)
                 {
-                    BSTreeNode<T>* new_node = new BSTreeNode<T>(x, current);
+                    BSTreeNode<Data>* new_node = new BSTreeNode<Data>(x, current);
                     current->_lchild = new_node;
                     update_size_upward(new_node);
                     break;
@@ -164,9 +169,9 @@ public:
             }
             else
             {
-                if(current->_rchild == NULL)
+                if(current->_rchild == nullptr)
                 {
-                    BSTreeNode<T>* new_node = new BSTreeNode<T>(x, current);
+                    BSTreeNode<Data>* new_node = new BSTreeNode<Data>(x, current);
                     current->_rchild = new_node;
                     update_size_upward(new_node);
                     break;
@@ -176,10 +181,11 @@ public:
         }
     }
 
-    iterator find(const T& x) {
+    iterator find(const Data& x) const
+    {
         if(empty())
             return end();
-        BSTreeNode<T>* current = _maximum->_lchild;
+        BSTreeNode<Data>* current = _maximum->_lchild;
         while(true)
         {
             if(current->_data > x)
@@ -200,22 +206,23 @@ public:
         return end();
     }
 
-    bool erase(iterator pos) {
-        BSTreeNode<T>* current = pos._node;
-        BSTreeNode<T>* parent  = current->_parent;
-        if(current->_rchild == NULL && current->_lchild == NULL)
+    bool erase(iterator pos)
+    {
+        BSTreeNode<Data>* current = pos._node;
+        BSTreeNode<Data>* parent  = current->_parent;
+        if(current->_rchild == nullptr && current->_lchild == nullptr)
         {
             if(parent->_rchild == current)
-                parent->_rchild = NULL;
+                parent->_rchild = nullptr;
             else if(parent->_lchild == current)
-                parent->_lchild = NULL;
+                parent->_lchild = nullptr;
             delete current;
             update_size_upward(parent);
         }
-        else if(current->_rchild == NULL || current->_lchild == NULL)
+        else if(current->_rchild == nullptr || current->_lchild == nullptr)
         {
-            BSTreeNode<T>* child = current->_rchild;
-            if(child == NULL)
+            BSTreeNode<Data>* child = current->_rchild;
+            if(child == nullptr)
                 child = current->_lchild;
 
             if(parent->_rchild == current)
@@ -234,7 +241,8 @@ public:
         }
         return true;
     }
-    bool erase(const T& x) {
+    bool erase(const Data& x)
+    {
         iterator it = find(x);
         if(it == end())
             return false;
@@ -242,33 +250,56 @@ public:
     }
     void pop_front() { erase(begin()); }
     void pop_back() { erase(back()); }
-    void clear() {      // PostOrder
-        if(empty())
-            return;
-        clear_dfs(_maximum->_lchild);
-    }
 
-    void sort() const {  }
-    void print() const {  } // print -v
+    // PostOrder
+    void clear() { clear_dfs(_maximum->_lchild); }
+#ifndef NDEBUG
+    void print_preorder()  const { print_preorder_dfs(_maximum->_lchild); }
+    void print_inorder()   const { print_inorder_dfs(_maximum->_lchild); }
+    void print_postorder() const { print_postorder_dfs(_maximum->_lchild); }
+#endif // NDEBUG
+
 private:
-    BSTreeNode<T>*  _maximum;   // dummy node
-    void clear_dfs(BSTreeNode<T>* node)
+    BSTreeNode<Data>*  _maximum;   // Dummy node
+    void clear_dfs(BSTreeNode<Data>* node)
     {
-        if(node->_lchild != NULL)
-            clear_dfs(node->_lchild);
-        if(node->_rchild != NULL)
-            clear_dfs(node->_rchild);
+        if(node == nullptr) return;
+        clear_dfs(node->_lchild);
+        clear_dfs(node->_rchild);
         erase(iterator(node));
     }
-    void update_size_upward(BSTreeNode<T>* node)
+    void update_size_upward(BSTreeNode<Data>* node)
     {
         do
         {
             node->update_size();
             node = node->_parent;
         }
-        while(node != NULL);
+        while(node != nullptr);
     }
+#ifndef NDEBUG
+    void print_preorder_dfs(BSTreeNode<Data>* node) const
+    {
+        if(node == nullptr) return;
+        cout << " " << node->_data;
+        print_preorder_dfs(node->_lchild);
+        print_preorder_dfs(node->_rchild);
+    }
+    void print_inorder_dfs(BSTreeNode<Data>* node) const
+    {
+        if(node == nullptr) return;
+        print_inorder_dfs(node->_lchild);
+        cout << " " << node->_data;
+        print_inorder_dfs(node->_rchild);
+    }
+    void print_postorder_dfs(BSTreeNode<Data>* node) const
+    {
+        if(node == nullptr) return;
+        print_postorder_dfs(node->_lchild);
+        print_postorder_dfs(node->_rchild);
+        cout << " " << node->_data;
+    }
+#endif // NDEBUG
 };
 
 #endif // BINARYSEARCHTREE_HPP

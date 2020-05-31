@@ -4,6 +4,7 @@
  * Copyleft (c) 2009-present LaDs(III), GIEE, NTU, Taiwan
  * Copyleft (C) 2020 WildfootW all rights reversed
  * MinHeap Template implemented with array (complete binary tree)
+ * Priority Queue
  */
 
 #ifndef MINHEAP_HPP
@@ -29,7 +30,7 @@ public:
     size_t size() const { return _data.size() - 1; }
     bool empty() const { return size() == 0; }
 
-    const Data& min() const
+    const Data& front() const
     {
         assert(size());
         return _data[1];
@@ -50,8 +51,8 @@ public:
                 break;
         }
     }
-    void del_min() { del_data(0); }
-    void del_data(size_t n) // delete index n
+    void pop() { erase(0); }
+    void erase(size_t n) // delete index n
     {
         assert(size() > n);
 
@@ -63,7 +64,7 @@ public:
         // if have rchild and rchild is smaller, swap
         while(lchild(current) < _data.size()) // check if we still have child
         {
-            // select min child
+            // select min/max child
             size_t child = lchild(current);
             if(rchild(current) < _data.size()) // rchild exist
             {
@@ -89,10 +90,13 @@ public:
             cout << i << " : " << _data[i] << endl;
         }
     }
+    void print_preorder()  const { print_preorder_dfs(1); }
+    void print_inorder()   const { print_inorder_dfs(1); }
+    void print_postorder() const { print_postorder_dfs(1); }
 #endif // NDEBUG
 
 private:
-    vector<Data>   _data;   // _data[0] is dummy node;
+    vector<Data>   _data;   // _data[0] is not being use;
 
     inline static size_t parent(const size_t& x) { return x / 2; }
     inline static size_t lchild(const size_t& x) { return x * 2; }
@@ -102,6 +106,36 @@ private:
     // We don't respond for the case vector "_data" is empty!
     const Data& operator [] (size_t i) const { return _data[i + 1]; }
           Data& operator [] (size_t i)       { return _data[i + 1]; }
+
+#ifndef NDEBUG
+    void print_preorder_dfs(size_t x) const
+    {
+        if(x < _data.size())
+        {
+            cout << " " << _data[x];
+            print_preorder_dfs(lchild(x));
+            print_preorder_dfs(rchild(x));
+        }
+    }
+    void print_inorder_dfs(size_t x) const
+    {
+        if(x < _data.size())
+        {
+            print_inorder_dfs(lchild(x));
+            cout << " " << _data[x];
+            print_inorder_dfs(rchild(x));
+        }
+    }
+    void print_postorder_dfs(size_t x) const
+    {
+        if(x < _data.size())
+        {
+            print_postorder_dfs(lchild(x));
+            cout << " " << _data[x];
+            print_postorder_dfs(rchild(x));
+        }
+    }
+#endif // NDEBUG
 };
 
 #endif // MINHEAP_HPP
