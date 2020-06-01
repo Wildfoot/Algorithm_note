@@ -82,19 +82,6 @@ public:
         }
     }
 
-#ifndef NDEBUG
-    void print_array() const
-    {
-        for(size_t i = 0;i < _data.size();++i)
-        {
-            cout << i << " : " << _data[i] << endl;
-        }
-    }
-    void print_preorder()  const { print_preorder_dfs(1); }
-    void print_inorder()   const { print_inorder_dfs(1); }
-    void print_postorder() const { print_postorder_dfs(1); }
-#endif // NDEBUG
-
 private:
     vector<Data>   _data;   // _data[0] is not being use;
 
@@ -108,6 +95,18 @@ private:
           Data& operator [] (size_t i)       { return _data[i + 1]; }
 
 #ifndef NDEBUG
+public:
+    void print_array() const
+    {
+        for(size_t i = 0;i < _data.size();++i)
+        {
+            cout << i << " : " << _data[i] << endl;
+        }
+    }
+    void print_preorder()  const { print_preorder_dfs(1); }
+    void print_inorder()   const { print_inorder_dfs(1); }
+    void print_postorder() const { print_postorder_dfs(1); }
+private:
     void print_preorder_dfs(size_t x) const
     {
         if(x < _data.size())

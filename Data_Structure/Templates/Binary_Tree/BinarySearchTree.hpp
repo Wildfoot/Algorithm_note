@@ -252,11 +252,6 @@ public:
 
     // PostOrder
     void clear() { clear_dfs(_maximum->_lchild); }
-#ifndef NDEBUG
-    void print_preorder()  const { print_preorder_dfs(_maximum->_lchild); }
-    void print_inorder()   const { print_inorder_dfs(_maximum->_lchild); }
-    void print_postorder() const { print_postorder_dfs(_maximum->_lchild); }
-#endif // NDEBUG
 
 private:
     BSTreeNode<Data>*  _maximum;   // Dummy node
@@ -276,7 +271,13 @@ private:
         }
         while(node != nullptr);
     }
+
 #ifndef NDEBUG
+public:
+    void print_preorder()  const { print_preorder_dfs(_maximum->_lchild); }
+    void print_inorder()   const { print_inorder_dfs(_maximum->_lchild); }
+    void print_postorder() const { print_postorder_dfs(_maximum->_lchild); }
+private:
     void print_preorder_dfs(BSTreeNode<Data>* node) const
     {
         if(node == nullptr) return;
