@@ -130,8 +130,8 @@ private:
         if(x < _data.size())
         {
             print_postorder_dfs(lchild(x));
-            cout << " " << _data[x];
             print_postorder_dfs(rchild(x));
+            cout << " " << _data[x];
         }
     }
 #endif // NDEBUG
