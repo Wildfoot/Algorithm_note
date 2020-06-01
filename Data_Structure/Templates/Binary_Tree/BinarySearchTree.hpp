@@ -38,32 +38,31 @@ class BSTreeNode
     }
     BSTreeNode<Data>* get_rchild_end() const       // find maximal
     {
-        //BSTreeNode<Data>* ret(this);
-        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        BSTreeNode<Data> const * ret(this);
         while(ret->_rchild != nullptr)
             ret = ret->_rchild;
-        return ret;
+        return const_cast<BSTreeNode<Data>*>(ret);
     }
     BSTreeNode<Data>* get_lchild_end() const       // find minimal
     {
-        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        BSTreeNode<Data> const * ret(this);
         while(ret->_lchild != nullptr)
             ret = ret->_lchild;
-        return ret;
+        return const_cast<BSTreeNode<Data>*>(ret);
     }
     BSTreeNode<Data>* get_lparent_end() const
     {
-        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        BSTreeNode<Data> const * ret(this);
         while(ret->_parent != nullptr && ret->_parent->_rchild == ret) // Guarantee it is left parent
             ret = ret->_parent;
-        return ret;
+        return const_cast<BSTreeNode<Data>*>(ret);
     }
     BSTreeNode<Data>* get_rparent_end() const
     {
-        BSTreeNode<Data>* ret(const_cast<BSTreeNode<Data>*>(this));
+        BSTreeNode<Data> const * ret(this);
         while(ret->_parent != nullptr && ret->_parent->_lchild == ret)
             ret = ret->_parent;
-        return ret;
+        return const_cast<BSTreeNode<Data>*>(ret);
     }
 
     Data              _data;
