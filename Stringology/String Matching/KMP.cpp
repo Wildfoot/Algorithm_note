@@ -1,174 +1,197 @@
-/* Knuth Morris Pratt algorithm
- * Version 
+/*
+ * Knuth Morris Pratt algorithm (KMP)
+ * Version 1.1
  * Author: WildfootW
- * GitHub: github.com/Wildfoot
- * Copyright (C) 2018 WildfootW All rights reserved.
+ * GitHub: github.com/WildfootW
+ * Copyleft (C) 2018 WildfootW All rights reserved.
  *
  */
 
-//  define Fail function
-//      能知道匹配失敗時,B 要對齊哪裡繼續匹配(適用於B有重複子字串)
-//      後衍生為將B字串放在前面直接使用這步比對字串
+// Alternative KMP
+// * Put pattern in front of text and directly use calculate failure function
 //
-//           0 1 2 3 4 5        //S[j + 1] != S[i + 1]
-//           A B Z A B C        //j = fail(j + 1)
-//        i  ^                  //fail(i + 1) = j
-//        j^
-//fail()    -1
+// Alternative Fail Function
+// * failure value = Second Longest Proper Prefix-Suffix Length
+// * if failure > pattern length, considered as not equal (allow_overlap)
+// * if failure > pattern length, failure go back to 0 (!allow_overlap)
+
+// Allow Overlap = True (Default)
+// Text: ANANANA
+// Pattern: ANA
+// A N A A N A N A N A
+// 0 0 1 1 2 3 2 3 2 3
+// Matched!
+// ANANANA
+// ⤴ ⤴ ⤴
 //
-//           0 1 2 3 4 5
-//           A B Z A B C
-//        i    ^
-//        j^
-//fail()    -1-1
-//
-//           0 1 2 3 4 5        //S[j + 1] == S[i + 1]
-//           A B Z A B C        //j++
-//        i      ^              //fail(i + 1) = j
-//        j^
-//fail()    -1-1-1
-//
-//           0 1 2 3 4 5
-//           A B Z A B C
-//        i        ^
-//        j  ^
-//fail()    -1-1-1 0
-//
-//           0 1 2 3 4 5
-//           A B Z A B C
-//        i          ^
-//        j    ^
-//fail()    -1-1-1 0 1
-//
-//           0 1 2 3 4 5
-//           A B Z A B C
-//        i            ^
-//        j^
-//fail()    -1-1-1 0 1-1
+// Allow Overlap = False
+// Text: ANANANA
+// Pattern: ANA
+// A N A A N A N A N A
+// 0 0 1 1 2 3 0 1 2 3
+// Matched!
+// ANANANA
+// ⤴   ⤴
 
 #include <iostream>
-#include <ctime>
-
-#define INF 2147483647
-#define EPS 1e-9
+#include <vector>
 
 using namespace std;
 
-class KMP
+#ifndef KNUTHMORRISPRATT_HPP
+#define KNUTHMORRISPRATT_HPP
+class KnuthMorrisPratt
 {
-    private:
-        inline string fix_alignment(string para)   //DEBUG
-        {
-            const int alignment_num = 3;
-            para.resize(alignment_num, ' ');
-            return para;
-        }
+private:
+#ifndef NDEBUG
+    inline string fix_alignment(string para) const;
+#endif // NDEBUG
 
-    protected:
-        int * failure;
-        string stringA, stringB;
-        int substring_position; //answer stringA[substring_position] == stringB[0]
+protected:
+    string text, pattern;
+    vector<int> answer_pos; //answer text[answer_pos] == pattern[0]
+    int * failure; // second longest proper prefix-suffix length
 
-    public:
-        void calculate_failure();
-        void matching();
-        void print_failure() //DEBUG
-        {
-            for(int i = 0;i < stringB.length();i++)
-                clog << fix_alignment(string(1, stringB[i]));
-            clog << endl;
-            for(int i = 0;i < stringB.length();i++)
-                clog << fix_alignment(to_string(failure[i]));
-            clog << endl;
-        }
-        int answer()
-        {
-            if(substring_position == -1)
-            {
-                clog << "no matching!" << endl;
-            }
-            else
-            {
-                clog << "matching!" << endl;
-                clog << stringA << endl;
-                for(int i = 0;i < substring_position;i++)
-                    clog << " ";
-                clog << stringB << endl;
-            }
-            return substring_position;
-        }
+    void calculate_failure(bool allow_overlap);
+    void matching();
 
-        KMP(string A, string B):
-            stringA(A), stringB(B)
-        {
-            substring_position = -1;
-            failure = new int[stringB.length()];
-        }
-        ~KMP()
-        {
-            delete[] failure;
-        }
+#ifndef NDEBUG
+    void print_failure() const;
+#endif // NDEBUG
+
+public:
+    KnuthMorrisPratt(string text, string pattern):
+        text(text), pattern(pattern)
+    {
+        failure = new int[text.length() + pattern.length()];
+    }
+
+    ~KnuthMorrisPratt()
+    {
+        delete[] failure;
+    }
+
+    vector<int> answer(bool allow_overlap = true);
 };
 
-int main()
+#ifndef NDEBUG
+inline string KnuthMorrisPratt::fix_alignment(string para) const
 {
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
-
-    while(true)
-    {
-        string stringA, stringB;
-        cout << "String A: ";
-        getline(cin, stringA);
-        cout << "String B: ";
-        getline(cin, stringB);
-
-        KMP test{stringA, stringB};
-        test.calculate_failure();
-        test.print_failure();
-        test.matching();
-        test.answer();
-    }
-    clog << "Time used = " << (double)clock() / CLOCKS_PER_SEC << endl;
-    return 0;
+    const int alignment_num = 2;
+    para.resize(alignment_num, ' ');
+    return para;
 }
+#endif // NDEBUG
 
-void KMP::calculate_failure()
+void KnuthMorrisPratt::calculate_failure(bool allow_overlap)
 {
-    for(int i = 0;i < stringB.length();i++)
-        failure[i] = -1;
-    for(int i = 0, j = -1;(i + 1) < stringB.length();i++)
+    failure[0] = 0;
+    string combine_str = pattern + text;
+
+    for(int i = 1, j = 0;i < combine_str.length();++i)
     {
-        if(stringB[i + 1] == stringB[j + 1])
+        if(failure[i - 1] == pattern.length()) // failure[i - 1] == pattern.length() is my own alternative for in case failure > pattern length (z.B. ABZABC ABZABCABZABC)
         {
-            failure[i + 1] = j + 1;
-            j++;
+            if(allow_overlap)
+                j = failure[j - 1];
+            else
+                j = 0;
+        }
+
+        while(combine_str[i] != combine_str[j] && j > 0)
+        {
+            j = failure[j - 1];
+        }
+        if(combine_str[i] == combine_str[j])
+        {
+            failure[i] = ++j;
         }
         else
         {
-            j = failure[j + 1];
-            failure[i + 1] = j;
+            failure[i] = 0;
         }
     }
 }
-void KMP::matching()
+
+void KnuthMorrisPratt::matching()
 {
-    int cur_pos = 0;
-    for(int i = 0;i < stringA.length();i++)
+    for(int i = 0;i < text.length();++i)
     {
-        if(stringA[i] == stringB[cur_pos])
+        if(failure[pattern.length() + i] == pattern.length())
         {
-            cur_pos++;
-        }
-        else
-        {
-            cur_pos = failure[cur_pos] + 1;
-        }
-        if(cur_pos == stringB.length())
-        {
-            substring_position = i - stringB.length() + 1;
-            return;
+            answer_pos.push_back(i - pattern.length() + 1);
         }
     }
     return;
 }
+
+#ifndef NDEBUG
+void KnuthMorrisPratt::print_failure() const
+{
+    for(int i = 0;i < pattern.length();++i)
+        clog << fix_alignment(string(1, pattern[i]));
+    for(int i = 0;i < text.length();++i)
+        clog << fix_alignment(string(1, text[i]));
+    clog << endl;
+
+    for(int i = 0;i < (pattern.length() + text.length());++i)
+        clog << fix_alignment(to_string(failure[i]));
+    clog << endl;
+}
+#endif // NDEBUG
+
+vector<int> KnuthMorrisPratt::answer(bool allow_overlap)
+{
+    calculate_failure(allow_overlap);
+
+#ifndef NDEBUG
+    print_failure();
+#endif // NDEBUG
+
+    matching();
+
+#ifndef NDEBUG
+    if(answer_pos.size() == 0)
+    {
+        clog << "Nothing Matched." << endl;
+    }
+    else
+    {
+        clog << "Matched!" << endl;
+        clog << text << endl;
+        int idx = 0;
+        for(int i = 0;i < text.length() && idx < answer_pos.size();++i)
+        {
+            if(i == answer_pos[idx])
+            {
+                clog << "⤴";
+                ++idx;
+            }
+            else
+                clog << " ";
+        }
+        clog << endl;
+    }
+#endif // NDEBUG
+
+    return answer_pos;
+}
+
+#endif // KNUTHMORRISPRATT_HPP
+
+int main()
+{
+    while(true)
+    {
+        string text, pattern;
+        cout << "Text: ";
+        getline(cin, text);
+        cout << "Pattern: ";
+        getline(cin, pattern);
+
+        KnuthMorrisPratt test(text, pattern);
+        test.answer(true);
+    }
+    return 0;
+}
+
