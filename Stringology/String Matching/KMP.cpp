@@ -17,6 +17,7 @@
 
 // [TODO]
 // * fix text: NANANA, pattern: ANANA in !allow_overlap
+// * !allow_overlap have lots of problem -> Do not combine pattern & text
 
 // Allow Overlap = True (Default)
 // Text: ANANANA
@@ -187,8 +188,7 @@ int main()
         getline(cin, pattern);
 
         KnuthMorrisPratt test(text, pattern);
-//        test.answer(true);
-        test.answer(false);
+        test.answer(true);
     }
     return 0;
 }
