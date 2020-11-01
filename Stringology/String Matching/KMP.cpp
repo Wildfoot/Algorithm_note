@@ -1,6 +1,6 @@
 /*
  * Knuth Morris Pratt algorithm (KMP)
- * Version 1.1
+ * Version 1.2
  * Author: WildfootW
  * GitHub: github.com/WildfootW
  * Copyleft (C) 2018 WildfootW All rights reserved.
@@ -115,7 +115,7 @@ void KnuthMorrisPratt::calculate_failure(bool allow_overlap)
 
 void KnuthMorrisPratt::matching()
 {
-    for(int i = 0;i < text.length();++i)
+    for(int i = pattern.size() - 1;i < text.length();++i) // i = pattern.size() is avoid ... (z.B. text: 0110, pattern: 101, result should be 0 but 1)
     {
         if(failure[pattern.length() + i] == pattern.length())
         {
@@ -157,7 +157,7 @@ vector<int> KnuthMorrisPratt::answer(bool allow_overlap)
     }
     else
     {
-        clog << "Matched!" << endl;
+        clog << "Matched! " << answer_pos.size() << endl;
         clog << text << endl;
         int idx = 0;
         for(int i = 0;i < text.length() && idx < answer_pos.size();++i)
