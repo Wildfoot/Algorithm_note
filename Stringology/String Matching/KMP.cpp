@@ -15,6 +15,9 @@
 // * if failure > pattern length, considered as not equal (allow_overlap)
 // * if failure > pattern length, failure go back to 0 (!allow_overlap)
 
+// [TODO]
+// * fix text: NANANA, pattern: ANANA in !allow_overlap
+
 // Allow Overlap = True (Default)
 // Text: ANANANA
 // Pattern: ANA
@@ -50,7 +53,7 @@ private:
 protected:
     string text, pattern;
     vector<int> answer_pos; //answer text[answer_pos] == pattern[0]
-    int * failure; // second longest proper prefix-suffix length
+    vector<int> failure; // second longest proper prefix-suffix length
 
     void calculate_failure(bool allow_overlap);
     void matching();
@@ -61,14 +64,8 @@ protected:
 
 public:
     KnuthMorrisPratt(string text, string pattern):
-        text(text), pattern(pattern)
+        text(text), pattern(pattern), failure(text.length() + pattern.length())
     {
-        failure = new int[text.length() + pattern.length()];
-    }
-
-    ~KnuthMorrisPratt()
-    {
-        delete[] failure;
     }
 
     vector<int> answer(bool allow_overlap = true);
@@ -190,7 +187,8 @@ int main()
         getline(cin, pattern);
 
         KnuthMorrisPratt test(text, pattern);
-        test.answer(true);
+//        test.answer(true);
+        test.answer(false);
     }
     return 0;
 }
